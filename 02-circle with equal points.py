@@ -36,7 +36,7 @@ points= create_points(n_green, n_red, start, end)
 #basic parameters
 model= pe.ConcreteModel()
 
-model.R = pe.Var(bounds= (0, (start[1]+end[1])/ 2))
+model.R = pe.Var(bounds= (0, (start[1]+ end[1])/ 2))
 
 #data related to points
 model.g= pe.Set(initialize= range(n_green))
@@ -71,11 +71,11 @@ def red_point_distance(model, i):
 
 model.rd= pe.Param(model.r, rule= red_point_distance)
 
-model.gd_positive= pe.Var(model.g)
-model.gd_negative= pe.Var(model.g)
+model.gd_positive= pe.Var(model.g, within= pe.PositiveReals)
+model.gd_negative= pe.Var(model.g, within= pe.PositiveReals)
 
-model.rd_positive= pe.Var(model.r)
-model.rd_negative= pe.Var(model.r)
+model.rd_positive= pe.Var(model.r, within= pe.PositiveReals)
+model.rd_negative= pe.Var(model.r, within= pe.PositiveReals)
 
 #%%
 
@@ -142,6 +142,7 @@ elif (results.solver.termination_condition == pe.TerminationCondition.infeasible
 else:
     print ('Solver Status:',  results.solver.status)
 
+print('Objective:', model.R.value)
 
 #%%
 
@@ -154,8 +155,9 @@ r= model.R.value
 theta = np.linspace(0,2*np.pi,100)
 X= x0+r*np.cos(theta)
 Y= y0+r*np.sin(theta)
-plt.plot(X,Y,c='r', lw=3, alpha = 0.3)
 
+plt.figure(figsize= (5, 5))
+plt.plot(X, Y, c='blue', lw=1, alpha = 1)
 
 plt.scatter([x[0] for x in points['green']],
             [x[1] for x in points['green']],
@@ -165,7 +167,6 @@ plt.scatter([x[0] for x in points['red']],
             [x[1] for x in points['red']],
             color= 'red')
 
-
+plt.xlim((0, 20))
+plt.ylim((0, 20))
 #%%
-
-
