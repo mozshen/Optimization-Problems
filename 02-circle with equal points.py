@@ -2,6 +2,7 @@
 
 import pyomo.environ as pe
 import numpy as np
+import matplotlib.pyplot as plt
 
 #%%
 
@@ -133,3 +134,38 @@ solver= pe.SolverFactory('glpk', executable= os.getcwd()+ '\\glpk-4.65\\w64\\glp
 results= solver.solve(model)
 
 #%%
+
+if (results.solver.status == pe.SolverStatus.ok) and (results.solver.termination_condition == pe.TerminationCondition.optimal):
+    print('feasible')
+elif (results.solver.termination_condition == pe.TerminationCondition.infeasible):
+    print('infeasible')
+else:
+    print ('Solver Status:',  results.solver.status)
+
+
+#%%
+
+x0= (start[0]+ end[0])/ 2
+y0= (start[1]+ end[1])/ 2
+r= model.R.value
+
+#%%
+
+theta = np.linspace(0,2*np.pi,100)
+X= x0+r*np.cos(theta)
+Y= y0+r*np.sin(theta)
+plt.plot(X,Y,c='r', lw=3, alpha = 0.3)
+
+
+plt.scatter([x[0] for x in points['green']],
+            [x[1] for x in points['green']],
+            color= 'green')
+
+plt.scatter([x[0] for x in points['red']],
+            [x[1] for x in points['red']],
+            color= 'red')
+
+
+#%%
+
+
