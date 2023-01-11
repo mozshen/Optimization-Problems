@@ -24,10 +24,10 @@ def create_points(n_green, n_red, start, end):
 
 #%%
     
-n_green= np.random.randint(1, 10)
-n_red= np.random.randint(1, 10)
+n_green= np.random.randint(100, 300)
+n_red= np.random.randint(100, 300)
 start= (0, 0)
-end= (20, 20)
+end= (200, 200)
 
 points= create_points(n_green, n_red, start, end)
 
@@ -167,6 +167,8 @@ plt.scatter([x[0] for x in points['red']],
             [x[1] for x in points['red']],
             color= 'red')
 
-plt.xlim((0, 20))
-plt.ylim((0, 20))
+plt.xlim((start[0], end[0]))
+plt.ylim((start[1], end[1]))
 #%%
+
+results.write()
